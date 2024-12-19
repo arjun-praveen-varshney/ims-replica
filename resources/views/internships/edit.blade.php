@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Internship</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Dashboard')
+
+@section('content')
     <h1>Edit Internship</h1>
     <form action="{{ route('internships.update', $internship->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -17,5 +14,4 @@
         <button type="submit">Update Internship</button>
     </form>
     <a href="{{ route('internships.index') }}">Back to Internships</a>
-</body>
-</html>
+@endsection

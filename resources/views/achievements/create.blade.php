@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Achievement</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Achievements')
+
+@section('content')
     <h1>Add Achievement</h1>
     <form action="{{ route('achievements.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -15,5 +12,4 @@
         <button type="submit">Add Achievement</button>
     </form>
     <a href="{{ route('achievements.index') }}">Back to Achievements</a>
-</body>
-</html>
+@endsection

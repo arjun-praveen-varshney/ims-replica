@@ -20,16 +20,13 @@
         <ul>
             <li><a href="{{ route('internships.index') }}">Student Internships</a></li>
             <li><a href="{{ route('achievements.index') }}">Student Achievements</a></li>
+            <li><a href="{{ route('programs.index') }}">Student Courses and Workshops</a></li>
+            <li><a href="{{ route('papers.index') }}">Student Paper Publications</a></li>
         </ul>
     </div>
 
     <div class="main">
-        @auth
-        <h1>Welcome to the Dashboard, {{ Auth::user()->name }}</h1>
-        @else
-        <script>window.location = "{{ route('login') }}";</script>
-        @endauth
-        <p>Select a module from the sidebar to manage data.</p>
+        @yield('content')
     </div>
 </body>
 </html>

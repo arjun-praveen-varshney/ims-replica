@@ -15,7 +15,7 @@ class Achievement extends Model
 
     // Define the fillable attributes
     protected $fillable = [
-        'title', 'description', 'document_path'
+        'title', 'description', 'document_path', 'user_id',
     ];
 }
 

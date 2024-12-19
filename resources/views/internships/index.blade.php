@@ -1,27 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internships</title>
-    <style>
-        table, th, td { border: 1px solid black; border-collapse: collapse; }
-        th, td { padding: 10px; text-align: center; }
-        .sidebar { width: 200px; background: #f1f1f1; padding: 20px; position: fixed; height: 100%; }
-        .main { margin-left: 220px; padding: 20px; }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <h3>Dashboard</h3>
-        <ul>
-            <li><a href="{{ route('internships.index') }}">Student Internships</a></li>
-            <li><a href="{{ route('achievements.index') }}">Student Achievements</a></li>
-        </ul>
-    </div>
+@extends('layouts.app')
 
-    <div class="main">
+@section('title', 'Dashboard')
+
+@section('content')
         <h1>Student Internships</h1>
+        <form method="GET" action="{{ route('internships.index') }}">
+    <div class="input-group mb-3">
+        <input 
+            type="text" 
+            name="search" 
+            class="form-control" 
+            placeholder="Search internships..." 
+            value="{{ request('search') }}"
+        >
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+
 
         <a href="{{ route('internships.create') }}">Add Internship</a>
 
@@ -39,6 +34,7 @@
             </thead>
             <tbody>
                 @foreach($internships as $key => $internship)
+                @if($internship->user_id === auth()->id())
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>{{ $internship->company }}</td>
@@ -62,9 +58,8 @@
                         </form>
                     </td>
                 </tr>
+                @endif
                 @endforeach
             </tbody>
         </table>
-    </div>
-</body>
-</html>
+@endsection

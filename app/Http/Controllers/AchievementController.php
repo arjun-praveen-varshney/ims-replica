@@ -8,12 +8,22 @@ use Illuminate\Support\Facades\Storage;
 
 class AchievementController extends Controller
 {
-    // Display a listing of the achievements
-    public function index()
-    {
-        $achievements = Achievement::all();
-        return view('achievements.index', compact('achievements'));
+    // Display a listing of the achievements with search functionality
+    public function index(Request $request)
+{
+    $query = Achievement::query();
+
+    if ($request->has('search') && $request->search != '') {
+        $query->where(function ($q) use ($request) {
+            $q->where('title', 'like', '%' . $request->search . '%')
+              ->orWhere('description', 'like', '%' . $request->search . '%');
+        });
     }
+
+    $achievements = $query->where('user_id', auth()->id())->get();
+
+    return view('achievements.index', compact('achievements'));
+}
 
     // Show the form for creating a new achievement
     public function create()
@@ -23,27 +33,27 @@ class AchievementController extends Controller
 
     // Store a newly created achievement in storage
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'document' => 'nullable|mimes:pdf|max:2048',
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'document' => 'nullable|mimes:pdf|max:2048',
+    ]);
 
-        $documentPath = null;
-        if ($request->hasFile('document')) {
-            $documentPath = $request->file('document')->store('documents', 'public');
-        }
-
-        Achievement::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'document_path' => $documentPath,
-            'user_id' => auth()->id(),
-        ]);
-
-        return redirect()->route('achievements.index');
+    $documentPath = null;
+    if ($request->hasFile('document')) {
+        $documentPath = $request->file('document')->store('documents', 'public');
     }
+
+    Achievement::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'document_path' => $documentPath,
+        'user_id' => auth()->id(), // Ensures the logged-in user's ID is assigned
+    ]);
+
+    return redirect()->route('achievements.index');
+}
 
     // Show the form for editing the specified achievement
     public function edit(Achievement $achievement)

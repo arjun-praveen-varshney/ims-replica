@@ -8,12 +8,23 @@ use Illuminate\Support\Facades\Storage;
 
 class InternshipController extends Controller
 {
-    // Display a listing of the internships
-    public function index()
-    {
-        $internships = Internship::all();
-        return view('internships.index', compact('internships'));
+    // Display a listing of the internships with search functionality
+    public function index(Request $request)
+{
+    $query = Internship::query();
+
+    if ($request->has('search') && $request->search != '') {
+        $query->where(function ($q) use ($request) {
+            $q->where('company', 'like', '%' . $request->search . '%')
+              ->orWhere('description', 'like', '%' . $request->search . '%')
+              ->orWhere('duration', 'like', '%' . $request->search . '%');
+        });
     }
+
+    $internships = $query->where('user_id', auth()->id())->get();
+
+    return view('internships.index', compact('internships'));
+}
 
     // Show the form for creating a new internship
     public function create()
@@ -23,29 +34,29 @@ class InternshipController extends Controller
 
     // Store a newly created internship in storage
     public function store(Request $request)
-    {
-        $request->validate([
-            'company' => 'required|string|max:255',
-            'duration' => 'required|string|max:255',
-            'description' => 'required|string',
-            'document' => 'nullable|mimes:pdf|max:2048',
-        ]);
+{
+    $request->validate([
+        'company' => 'required|string|max:255',
+        'duration' => 'required|string|max:255',
+        'description' => 'required|string',
+        'document' => 'nullable|mimes:pdf|max:2048',
+    ]);
 
-        $documentPath = null;
-        if ($request->hasFile('document')) {
-            $documentPath = $request->file('document')->store('documents', 'public');
-        }
-
-        Internship::create([
-            'company' => $request->company,
-            'duration' => $request->duration,
-            'description' => $request->description,
-            'document_path' => $documentPath,
-            'user_id' => auth()->id(),
-        ]);
-
-        return redirect()->route('internships.index');
+    $documentPath = null;
+    if ($request->hasFile('document')) {
+        $documentPath = $request->file('document')->store('documents', 'public');
     }
+
+    Internship::create([
+        'company' => $request->company,
+        'duration' => $request->duration,
+        'description' => $request->description,
+        'document_path' => $documentPath,
+        'user_id' => auth()->id(), // Assign the current user's ID
+    ]);
+
+    return redirect()->route('internships.index');
+}
 
     // Show the form for editing the specified internship
     public function edit(Internship $internship)

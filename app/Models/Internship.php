@@ -9,5 +9,5 @@ class Internship extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['company', 'duration', 'description', 'document_path'];
+    protected $fillable = ['company', 'duration', 'description', 'document_path', 'user_id'];
 }
