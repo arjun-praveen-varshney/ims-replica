@@ -3,14 +3,15 @@
 @section('title', 'Paper Publications')
 
 @section('content')
-        <h1>Paper Publications</h1>
-
-        <form method="GET" action="{{ route('papers.index') }}">
-            <input type="text" name="search" placeholder="Search paper publications..." value="{{ request('search') }}">
-            <button type="submit">Search</button>
-        </form>
-        
-        <a href="{{ route('papers.create') }}">Add Paper Publication</a>
+<div id="publications" class="content-card">
+            <div class="card-header">
+                <h2>Student Paper Publications</h2>
+                <a href="{{ route('papers.create') }}" class="create-btn">
+                    <i class="fas fa-plus"></i>
+                    Add Publication
+                </a>
+            </div>
+            <div class="table-container">
 
 <table>
     <thead>
@@ -21,7 +22,7 @@
             <th>Publisher</th>
             <th>Paper link</th>
             <th>ISBN/ISSN NO.</th>
-            <th>Name of Conference</th>
+            <th>Name of Conference / Journal</th>
             <th>Indexing</th>
             <th>Other</th>
             <th>Actions</th>
@@ -37,7 +38,7 @@
                 <td>{{ $paperPublication->publisher }}</td>
                 <td>
                     @if($paperPublication->paper_link)
-                        <a href="{{ $paperPublication->paper_link }}" target="_blank">View Paper</a>
+                        <a href="{{ $paperPublication->paper_link }}" target="_blank" style="text-decoration: none; color: blue;">View Paper</a>
                     @else
                         N/A
                     @endif
@@ -46,17 +47,19 @@
                 <td>{{ $paperPublication->name_of_conference }}</td>
                 <td>{{ $paperPublication->indexing }}</td>
                 <td>{{ $paperPublication->other_details }}</td>
-                <td>
-                    <a href="{{ route('papers.edit', $paperPublication->id) }}"><button>Edit</button></a>
-                    <form method="POST" action="{{ route('papers.destroy', $paperPublication->id) }}" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
+                <td style="display: flex;">
+                <a href="{{ route('papers.edit', $paperPublication->id) }}">
+                    <button class="action-btn edit-btn"><i class="fas fa-edit" style="margin-right:8px;"></i>Edit</button>
+                </a>
+                <form action="{{ route('papers.destroy', $paperPublication->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="action-btn delete-btn"><i class="fas fa-trash" style="margin-right:8px;"></i>Delete</button>
+                </form>
+            </td>
             </tr>
         @endif
         @endforeach
     </tbody>
-</table>
+</table></div></div>
 @endsection

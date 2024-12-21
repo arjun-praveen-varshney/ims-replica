@@ -1,16 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Courses | Workshops')
 
 @section('content')
-        <h1>Courses and Workshops</h1>
-
-        <form method="GET" action="{{ route('programs.index') }}">
-    <input type="text" name="search" placeholder="Search courses/workshops..." value="{{ request('search') }}">
-    <button type="submit">Search</button>
-</form>
-
-<a href="{{ route('programs.create') }}">Add Course/Workshop</a>
+<div id="courses" class="content-card">
+            <div class="card-header">
+                <h2>Student Courses and Workshops</h2>
+                <a href="{{ route('programs.create') }}" class="create-btn">
+                    <i class="fas fa-plus"></i>
+                    Add Course/Workshop
+                </a>
+            </div>
+            <div class="table-container">
 
 <table>
     <thead>
@@ -37,7 +38,7 @@
                 <td>{{ $courseWorkshop->description }}</td>
                 <td>
                     @if($courseWorkshop->document_path)
-                        <a href="{{ asset('storage/' . $courseWorkshop->document_path) }}" target="_blank">View Document</a>
+                        <a href="{{ asset('storage/' . $courseWorkshop->document_path) }}" target="_blank" style="text-decoration: none; color: blue;">View Document</a>
                     @else
                         No Document
                     @endif
@@ -48,17 +49,19 @@
                 <td>{{ $courseWorkshop->location }}</td>
                 <td>{{ $courseWorkshop->organized_by }}</td>
                 <td>{{ $courseWorkshop->type }}</td>
-                <td>
-                    <a href="{{ route('programs.edit', $courseWorkshop->id) }}"><button>Edit</button></a>
-                    <form action="{{ route('programs.destroy', $courseWorkshop->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
+                <td style="display: flex;">
+                <a href="{{ route('programs.edit', $courseWorkshop->id) }}">
+                    <button class="action-btn edit-btn"><i class="fas fa-edit" style="margin-right:8px;"></i>Edit</button>
+                </a>
+                <form action="{{ route('programs.destroy', $courseWorkshop->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="action-btn delete-btn"><i class="fas fa-trash" style="margin-right:8px;"></i>Delete</button>
+                </form>
+            </td>
             </tr>
         @endif
         @endforeach
     </tbody>
-</table>
+</table></div></div>
 @endsection

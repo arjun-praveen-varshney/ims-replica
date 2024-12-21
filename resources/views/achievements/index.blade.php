@@ -3,24 +3,17 @@
 @section('title', 'Achievements')
 
 @section('content')
-        <h1>Student Achievements</h1>
-        <form method="GET" action="{{ route('achievements.index') }}">
-    <div class="input-group mb-3">
-        <input 
-            type="text" 
-            name="search" 
-            class="form-control" 
-            placeholder="Search achievements..." 
-            value="{{ request('search') }}"
-        >
-        <button class="btn btn-primary" type="submit">Search</button>
-    </div>
-</form>
-
-        <a href="{{ route('achievements.create') }}">Add Achievement</a>
-
+<div id="achievements" class="content-card">
+            <div class="card-header">
+        <h2>Student Achievements</h2>
+        <a href="{{ route('achievements.create') }}" class="create-btn">
+                    <i class="fas fa-plus"></i>
+                    Add Achievement
+                </a>
+                </div>
         <!-- Achievements Table -->
-        <table style="width:100%; margin-top: 20px;">
+         <div class="table-container">
+        <table>
             <thead>
                 <tr>
                     <th>Sr</th>
@@ -39,24 +32,24 @@
             <td>{{ $achievement->description }}</td>
             <td>
                 @if($achievement->document_path)
-                    <a href="{{ asset('storage/' . $achievement->document_path) }}" target="_blank">View</a>
+                    <a href="{{ asset('storage/' . $achievement->document_path) }}" style="text-decoration:none; color:blue;" target="_blank">View</a>
                 @else
                     No Document
                 @endif
             </td>
-            <td>
+            <td style="display: flex;">
                 <a href="{{ route('achievements.edit', $achievement->id) }}">
-                    <button>Edit</button>
+                    <button class="action-btn edit-btn"><i class="fas fa-edit" style="margin-right:8px;"></i>Edit</button>
                 </a>
-                <form action="{{ route('achievements.destroy', $achievement->id) }}" method="POST" style="display:inline;">
+                <form action="{{ route('achievements.destroy', $achievement->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit">Delete</button>
+                    <button type="submit" class="action-btn delete-btn"><i class="fas fa-trash" style="margin-right:8px;"></i>Delete</button>
                 </form>
             </td>
         </tr>
         @endif
     @endforeach
 </tbody>
-        </table>
+        </table></div></div>
 @endsection

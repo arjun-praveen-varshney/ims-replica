@@ -1,27 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Internships')
 
 @section('content')
-        <h1>Student Internships</h1>
-        <form method="GET" action="{{ route('internships.index') }}">
-    <div class="input-group mb-3">
-        <input 
-            type="text" 
-            name="search" 
-            class="form-control" 
-            placeholder="Search internships..." 
-            value="{{ request('search') }}"
-        >
-        <button class="btn btn-primary" type="submit">Search</button>
+<div id="internships" class="content-card">
+            <div class="card-header">
+        <h2>Student Internships</h2>
+        <a href="{{ route('internships.create') }}" class="create-btn"><i class="fas fa-plus"></i>Add Internship</a>
     </div>
-</form>
-
-
-        <a href="{{ route('internships.create') }}">Add Internship</a>
 
         <!-- Internships Table -->
-        <table style="width:100%; margin-top: 20px;">
+         <div class="table-container">
+        <table>
             <thead>
                 <tr>
                     <th>Sr</th>
@@ -42,24 +32,24 @@
                     <td>{{ $internship->description }}</td>
                     <td>
                         @if($internship->document_path)
-                            <a href="{{ asset('storage/' . $internship->document_path) }}" target="_blank">View</a>
+                            <a href="{{ asset('storage/' . $internship->document_path) }}" target="_blank" style="text-decoration:none; color: blue;">View</a>
                         @else
                             No Document
                         @endif
                     </td>
-                    <td>
-                        <a href="{{ route('internships.edit', $internship->id) }}">
-                            <button>Edit</button>
-                        </a>
-                        <form action="{{ route('internships.destroy', $internship->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
+                    <td style="display: flex;">
+                <a href="{{ route('internships.edit', $internship->id) }}">
+                    <button class="action-btn edit-btn"><i class="fas fa-edit" style="margin-right:8px;"></i>Edit</button>
+                </a>
+                <form action="{{ route('internships.destroy', $internship->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="action-btn delete-btn"><i class="fas fa-trash" style="margin-right:8px;"></i>Delete</button>
+                </form>
+            </td>
                 </tr>
                 @endif
                 @endforeach
             </tbody>
-        </table>
+        </table></div></div>
 @endsection
